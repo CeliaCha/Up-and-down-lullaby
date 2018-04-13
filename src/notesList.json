@@ -1,0 +1,10 @@
+[
+    {"letter":"C", "name": "Do grave", "octave": 4},
+    {"letter":"D", "name": "Ré grave", "octave": 4},
+    {"letter":"E", "name": "Mi grave", "octave": 4},
+    {"letter":"F", "name": "Fa grave", "octave": 4},
+    {"letter":"G", "name": "Sol grave", "octave": 4},
+    {"letter":"A", "name": "La grave", "octave": 5},
+    {"letter":"B", "name": "Si grave", "octave": 5},
+    {"letter":"C", "name": "Do aigu", "octave": 5}
+]

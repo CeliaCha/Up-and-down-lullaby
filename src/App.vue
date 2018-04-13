@@ -1,9 +1,10 @@
 <template>
   <div id="app">
-    <button @click="playRandom">Start</button>
-    <!-- <h1>{{playedNote}}</h1> -->
+    <button @click="playAll">Jouer gamme</button>
+    <button @click="playRandom">Démarrer le jeu</button>
+    <h1>{{playedNote}}</h1>
     <div id='notes-list'>
-      <template v-for="note in frenchNotes">
+      <template v-for="note in notesNames">
         <p class='note-choice' :key='note' @click='guessResult(note)'>{{note}} </p>
       </template>
     </div>
@@ -13,6 +14,7 @@
 
 <script>
 import HelloWorld from './components/HelloWorld'
+import notesList from './notesList'
 
 const AudioSynth = require('audiosynth');
 const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -27,42 +29,43 @@ export default {
   },
   data() {
       return {
-        notes : ['C','D','E','F','G','A','B'],
-        frenchNotes : ['do','ré','mi','fa','sol','la','si'],
+        notes : notesList,
         playedNote : 'Placeholder note',
         numNote: 0,
         result: {text: '?', color: 'white'}
       };
     },
+    computed : {
+      notesNames : function () {
+        let array = []
+        this.notes.forEach(note => array.push(note.name))
+        return array
+      }
+    },
     methods: {
       playAll: function() {
         let self = this
-        let octave;
-        if (this.numNote < 7) {
-          this.numNote < 5 ? octave = 4 : octave = 5
+        if (this.numNote < 8) {
           setTimeout(() => {
-            synth.playNote(synth.noteToMIDI(self.notes[self.numNote], octave), 2.0, 1.0, 0)
-            self.playedNote = self.frenchNotes[self.numNote]
+            let note = this.notes[this.numNote]
+            synth.playNote(synth.noteToMIDI(note.letter, note.octave), 2.0, 1.0, 0)
+            this.playedNote = note.name
             self.numNote ++
             self.playAll();
           }, 1000);
         }
       },
-      playRandom: function() {
+      playRandom: function () {
         this.result.color = 'white'
         this.result.text = '?'
-        let octave;
-        let randomNum = Math.floor(Math.random() * 7)
-        randomNum < 5 ? octave = 4 : octave = 5
-        console.log(octave)
-        let randomNote = this.notes[randomNum]
-        let frenchNote = this.frenchNotes[randomNum]
-        this.playedNote = frenchNote
-        synth.playNote(synth.noteToMIDI(randomNote, octave), 2.0, 1.0, 0)
+        let randomNum = Math.floor(Math.random() * 8)
+        let note = this.notes[randomNum]
+        this.playedNote = note.name
+        synth.playNote(synth.noteToMIDI(note.letter, note.octave), 2.0, 1.0, 0)
       },
       guessResult: function(note) {
-        let indexOfGuessedNote = this.frenchNotes.indexOf(note)
-        let indexOfPlayedNote = this.frenchNotes.indexOf(this.playedNote)
+        let indexOfGuessedNote = this.notesNames.indexOf(note)
+        let indexOfPlayedNote = this.notesNames.indexOf(this.playedNote)
         if (indexOfGuessedNote > indexOfPlayedNote) {
           this.result.text = '<<<'
           this.result.color = 'red'
@@ -100,13 +103,13 @@ export default {
 }
 
 #notes-list {
-  /* margin-top: 50px; */
+  display: flex;
+  flex-wrap: wrap;
   width: 50%;
   margin: auto;
   margin-top: 50px;
   margin-bottom: 50px;
-  display: flex;
-  flex-direction: row;
+  
 }
 .note-choice {
   width: 40px;
@@ -115,8 +118,8 @@ export default {
   margin : 5px;
   /* align-self: auto; */
 }
-
 .note-choice:hover {
-  background-color: grey;
+  background-color: cyan;
+  cursor: pointer;
 }
 </style>
