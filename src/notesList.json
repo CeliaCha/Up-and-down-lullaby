@@ -1,10 +1,10 @@
 [
-    {"letter":"C", "name": "Do grave", "octave": 4},
-    {"letter":"D", "name": "Ré grave", "octave": 4},
-    {"letter":"E", "name": "Mi grave", "octave": 4},
-    {"letter":"F", "name": "Fa grave", "octave": 4},
-    {"letter":"G", "name": "Sol grave", "octave": 4},
-    {"letter":"A", "name": "La grave", "octave": 5},
-    {"letter":"B", "name": "Si grave", "octave": 5},
-    {"letter":"C", "name": "Do aigu", "octave": 5}
+    {"audio":"C", "abcjs":"C2", "name": "Do", "octave": 4},
+    {"audio":"D", "abcjs":"D2", "name": "Ré", "octave": 4},
+    {"audio":"E", "abcjs":"E2", "name": "Mi", "octave": 4},
+    {"audio":"F", "abcjs":"F2", "name": "Fa", "octave": 4},
+    {"audio":"G", "abcjs":"G2", "name": "Sol", "octave": 4},
+    {"audio":"A", "abcjs":"A2", "name": "La", "octave": 5},
+    {"audio":"B", "abcjs":"B2", "name": "Si", "octave": 5},
+    {"audio":"C", "abcjs":"c2", "name": "Do", "octave": 5}
 ]
