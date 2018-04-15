@@ -4,7 +4,7 @@
 
 > A Vue.js project
 
-Le but du jeu est de deviner la note jouée par l'ordinateur. A chaque erreur, un indice indique s'il faut chercher une note plus haute ou plus basse. Les notes devinées s'affichent au fur et à mesure sur une portée et le jeu s'arrête au bout de trois erreurs.
+Le but du jeu est de deviner la note jouée par l'ordinateur. A chaque erreur de l'utilisateur, un indice indique s'il faut chercher une note plus haute ou plus basse. Les notes devinées s'affichent au fur et à mesure sur une portée musicale et le jeu s'arrête au bout de trois erreurs.
 
 Librairies utilisées : [audiosynth](https://github.com/keithwhor/audiosynth) pour l'interface MIDI, [abcjs](https://github.com/paulrosen/abcjs) pour l'affichage de la portée musicale.
 
