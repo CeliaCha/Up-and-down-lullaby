@@ -3,13 +3,12 @@
 > Lien vers le jeu : [https://simplon-links.firebaseapp.com/](https://simplon-links.firebaseapp.com/)
 
 > A Vue.js project
-> Guess notes played by the computer
-> Libraries : abcjs and audiosynth
-> Design : Bootstrap
 
 > Le but du jeu est de deviner les notes jouées par l'ordinateur. A chaque erreur, un indice indique "plus haut" ou "plus bas". Les notes devinées s'affichent au fur et à mesure sur une portée.
 
 > Libraries utilisées : [audiosynth](https://github.com/keithwhor/audiosynth) pour l'interface MIDI, [abcjs](https://github.com/paulrosen/abcjs) pour l'affichage de la portée musicale.
+
+> L'essentiel du code est situé dans /src/App.vue
 
 
 ## Build Setup
