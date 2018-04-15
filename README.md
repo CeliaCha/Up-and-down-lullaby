@@ -1,4 +1,4 @@
-# UpAndDown-Lullaby
+# Guess the mystery notes
 
 > Lien vers le jeu : [https://simplon-links.firebaseapp.com/](https://simplon-links.firebaseapp.com/)
 
