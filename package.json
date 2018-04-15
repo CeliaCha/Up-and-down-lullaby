@@ -12,7 +12,7 @@
   "dependencies": {
     "abcjs": "^4.0.1",
     "audiosynth": "0.0.5",
-    "uninstall": "0.0.0",
+    "bootstrap-vue": "^2.0.0-rc.6",
     "vue": "^2.5.2"
   },
   "devDependencies": {

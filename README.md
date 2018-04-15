@@ -1,8 +1,14 @@
 # UpAndDown-Lullaby
 
 > A Vue.js project
-> Guess notes played and display them on musical partition
-Libraries : abcjs and audiosynth
+> Guess notes played by the computer
+> Libraries : abcjs and audiosynth
+> Design : Bootstrap
+
+> Le but du jeu est de deviner les notes jouées par l'ordinateur. A chaque erreur, un indice indique "plus haut" ou "plus bas". Les notes devinées s'affichent au fur et à mesure sur une portée.
+
+> Libraries utilisées : [audiosynth](https://github.com/keithwhor/audiosynth) pour l'interface MIDI, [abcjs](https://github.com/paulrosen/abcjs) pour l'affichage de la portée musicale.
+
 
 ## Build Setup
 
