@@ -6,14 +6,14 @@
       <p>Erreurs : <span>{{errors}}</span></p>
       <div id='scores-list'>
         <template v-for="score in scoresList">
-                      <li  class='note-name' :key='score'>{{score}} </li>
-          </template>
+                        <li  class='note-name' :key='score'>{{score}} </li>
+</template>
       </div>
       <div id='notes-list'>
         <transition-group name="flip-notes">
-          <template v-for="note in notes">
-                      <span  class='note-name' :key='note.name' @click='guessNote(note)' :style='{backgroundColor : note.color}'>{{note.name}} </span>
-          </template>
+<template v-for="note in notes">
+  <span class='note-name' :key='note.name' @click='guessNote(note)' :style='{backgroundColor : note.color}'>{{note.name}} </span>
+</template>
         </transition-group>
     </div>
     <h4> <b-badge v-if="result.text !=='?'" id='result' :style='{backgroundColor : result.color}'>{{result.text}}</b-badge></h4>
@@ -37,7 +37,8 @@
   
   export default {
     name: 'App',
-        mounted: function() {
+    mounted: function() {
+      if (localStorage.getItem('scoresList')) this.scoresList = JSON.parse(localStorage.getItem('scoresList'));
       let tune = "M:4/4\n||"
       abcjs.renderAbc("paper", tune, {});
       this.shuffleNotes()
@@ -52,18 +53,20 @@
         timeStart: 0,
         result: {
           text: '?',
-          color: 'white'
+          color: ''
         },
         tune: {
           notes: 'M:4/4\n||',
           count: 0
         }
-      };
+      }
     },
     watch: {
       scoresList: {
         handler() {
           console.log(this.scoresList);
+          localStorage.setItem('scoresList', JSON.stringify(this.scoresList))
+          deep: true
         }
       },
     },
@@ -103,7 +106,7 @@
             if (this.errors > 2) this.endGame()
         } else {
           let timeToFind = Date.now() - this.timeStart
-          let bonusTime = (50 - Math.round(timeToFind/100))
+          let bonusTime = (50 - Math.round(timeToFind / 100))
           bonusTime > 0 ? this.score += 10 + bonusTime : this.score += 10
           this.result.text = 'Bravo !'
           this.result.color = 'green'
@@ -114,13 +117,12 @@
             abcjs.renderAbc("paper", this.tune.notes, {
               staffwidth: 600,
               responsive: "resize",
-            });
+            })
           let self = this
           this.shuffleNotes()
           setTimeout(() => {
-  
             self.playRandomNote()
-          }, 2500);
+          }, 2500)
         }
       },
       endGame: function() {
@@ -148,28 +150,28 @@
     text-align: center;
     color: #2c3e50;
     max-width: 600px !important;
-    margin:auto;
+    margin: auto;
   }
   
   #notes-list {
-    margin:auto;
+    margin: auto;
     display: flex;
     flex-wrap: wrap;
     width: 210px;
     margin-top: 50px;
     margin-bottom: 50px;
   }
-
+  
   .note-name {
     cursor: pointer;
     display: inline-block;
     margin: 1px;
     width: 50px;
     height: 50px;
-    line-height:50px;
+    line-height: 50px;
     border-radius: 5px;
   }
-
+  
   #paper {
     max-width: 500px;
   }
@@ -177,6 +179,4 @@
   .flip-notes-move {
     transition: transform 1s;
   }
-  
-
 </style>
