@@ -1,20 +1,13 @@
 <template>
 <div id="app">
-    <b-card bg-variant="light" header="GUESS MYSTERY NOTES" class="text-center">
+    <b-card bg-variant="light" header="DEVINEZ LA NOTE MYSTÈRE" class="text-center">
        
                 <div class='wrapper'>
-                  <div class='result'>
-                    <p>Score : <span>{{score}}</span></p>
-                    <p>Erreurs : <span>{{errors}}</span></p>
-                    <div id='scores-list'>
-                        <template v-for="score in bestScores">
-                                <p :key='score'>{{score}} </p>
-                        </template>
-                    </div>
-                  </div>
+                  <b-button v-if="partyStarted === false" class='game-score' lg @click="startParty">Nouvelle partie</b-button>
+                  <b-button v-else class='game-score' lg>
+                    Score : <span>{{score}}</span> - Erreurs : <span>{{errors}}</span>
+                    </b-button>
                   <div class='guess'>
-                    <b-button lg @click="playRandomNote">Nouvelle partie</b-button>
-                    <div v-if="displaySonar === true" class="btn-sonar"></div>
                     <div id='notes-list'>
                         <transition-group name="flip-notes">
                             <template v-for="note in notes">
@@ -22,15 +15,20 @@
                           </template>
                         </transition-group>
                     </div>
-                    <h4>
-                        <b-badge v-if="message.text !==''" id='message' :style='{backgroundColor : message.color}'>{{message.text}}</b-badge>
-                    </h4>
+                    <div v-if="displaySonar === true" class="btn-sonar"></div>
+                    <div v-else class="btn-static"><h4><b-badge v-if="message.text !==''" id='message' :style='{backgroundColor : message.color}'>{{message.text}}</b-badge></h4></div>
+                  </div>
+                  <div class='result'>
+                    <p>Meilleurs scores :</p>
+                    <ol id='scores-list'>
+                        <li v-for="score in bestScores" :key='score'> {{score}}</li>
+                    </ol>
+                  </div>
                 </div>
+
                 <div class='displaynotes' id="paper">
                     <!-- Musical partition injected here -->
                 </div>
-             </div>
-                
     </b-card>
 </div>
 </template>
@@ -57,6 +55,7 @@ export default {
     data() {
         return {
             notes: notesList,
+            partyStarted : false,
             playedNote: {},
             timeStart: 0,
             errors: 0,
@@ -76,7 +75,7 @@ export default {
     computed: {
         bestScores: function () {
             let sortedScores = this.scoresList.sort((a, b) => b - a)
-            return sortedScores.slice(0, 3)
+            return sortedScores.slice(0, 5)
         }
     },
     watch: {
@@ -91,10 +90,14 @@ export default {
         shuffleNotes: function () {
             this.notes = _.shuffle(this.notes)
         },
+        startParty: function () {
+          this.partyStarted = true
+          this.playRandomNote()
+        },
         playRandomNote: function () {
             this.timeStart = Date.now()
-            this.message.color = 'white'
-            this.message.text = '?'
+            this.message.color = ''
+            this.message.text = ''
             let randomNum = Math.floor(Math.random() * 8)
             let note = this.notes[randomNum]
             this.playedNote = note
@@ -156,10 +159,11 @@ export default {
             abcjs.renderAbc("paper", "M:4/4\n||", {})
             this.partition.notes = ''
             this.partition.count = 0
-            this.message.text = '?'
-            this.message.color = 'white'
+            this.message.text = ''
+            this.message.color = ''
             this.errors = 0
             this.score = 0
+            this.partyStarted = false
         }
     }
 }
@@ -178,15 +182,14 @@ export default {
 
 .wrapper {
   display: grid;
-  grid-template-columns: 100px 500px;
+  margin: auto;
+  grid-template-columns: 460px 100px ;
 }
 
-// .result {
-//   grid-column: 1 / 1;
-// }
-// .guess {
-//   grid-column: 2 / 1;
-// }
+.game-score {
+  grid-column: 1 / 3;
+  margin-bottom: 30px;
+}
 
 
 #notes-list {
@@ -216,7 +219,17 @@ export default {
     transition: transform 1s;
 }
 
-/* SONAR EFFECT - adapted from https://codepen.io/tieppt/pen/vKJNaE */
+/* SONAR EFFECT - adapted from https://codepen.io/tieppt/pen/vKJNaE : */
+.btn-static {
+   margin: 10px;
+    border: 0;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    outline: none;
+    position: relative;
+}
 
 .btn-sonar {
     margin: 10px;
