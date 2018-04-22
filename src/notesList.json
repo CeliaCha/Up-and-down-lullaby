@@ -1,12 +1,12 @@
 [
-    {"audio":"C", "abcjs":"C2", "name": "Do", "octave": 4, "color": "#00695c"},
-    {"audio":"D", "abcjs":"D2", "name": "Ré", "octave": 4, "color": "#00796b"},
-    {"audio":"E", "abcjs":"E2", "name": "Mi", "octave": 4, "color": "#00897b"},
-    {"audio":"F", "abcjs":"F2", "name": "Fa", "octave": 4, "color": "#009688"},
-    {"audio":"G", "abcjs":"G2", "name": "Sol", "octave": 4, "color": "#26a69a"},
-    {"audio":"A", "abcjs":"A2", "name": "La", "octave": 5, "color": "#4db6ac"},
-    {"audio":"B", "abcjs":"B2", "name": "Si", "octave": 5, "color": "#80cbc4"},
-    {"audio":"C", "abcjs":"c2", "name": "Do ", "octave": 5, "color": "#b2dfdb"}
+    {"audio":"C", "abcjs":"C2", "name": "DO", "octave": 4, "color": "#00695c"},
+    {"audio":"D", "abcjs":"D2", "name": "RÉ", "octave": 4, "color": "#00796b"},
+    {"audio":"E", "abcjs":"E2", "name": "MI", "octave": 4, "color": "#00897b"},
+    {"audio":"F", "abcjs":"F2", "name": "FA", "octave": 4, "color": "#009688"},
+    {"audio":"G", "abcjs":"G2", "name": "SOL", "octave": 4, "color": "#26a69a"},
+    {"audio":"A", "abcjs":"A2", "name": "LA", "octave": 5, "color": "#4db6ac"},
+    {"audio":"B", "abcjs":"B2", "name": "SI", "octave": 5, "color": "#80cbc4"},
+    {"audio":"C", "abcjs":"c2", "name": "DO+", "octave": 5, "color": "#b2dfdb"}
 ]
 
 
