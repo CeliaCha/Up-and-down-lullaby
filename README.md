@@ -1,14 +1,14 @@
-# UpAndDown-Lullaby
+# Guess the mystery notes
 
 > Lien vers le jeu : [https://simplon-links.firebaseapp.com/](https://simplon-links.firebaseapp.com/)
 
 > A Vue.js project
 
-> Le but du jeu est de deviner les notes jouées par l'ordinateur. A chaque erreur, un indice indique "plus haut" ou "plus bas". Les notes devinées s'affichent au fur et à mesure sur une portée.
+Le but du jeu est de deviner la note jouée par l'ordinateur. A chaque erreur de l'utilisateur, un indice indique s'il faut chercher une note plus haute ou plus basse. Les notes devinées s'affichent au fur et à mesure sur une portée musicale et le jeu s'arrête au bout de trois erreurs.
 
-> Libraries utilisées : [audiosynth](https://github.com/keithwhor/audiosynth) pour l'interface MIDI, [abcjs](https://github.com/paulrosen/abcjs) pour l'affichage de la portée musicale.
+Librairies utilisées : [audiosynth](https://github.com/keithwhor/audiosynth) pour l'interface MIDI, [abcjs](https://github.com/paulrosen/abcjs) pour l'affichage de la portée musicale.
 
-> L'essentiel du code est situé dans /src/App.vue
+L'essentiel du code est situé dans /src/App.vue
 
 
 ## Build Setup
