@@ -6,7 +6,7 @@
     {"audio":"G", "abcjs":"G2", "name": "SOL", "octave": 4, "color": "#26a69a"},
     {"audio":"A", "abcjs":"A2", "name": "LA", "octave": 5, "color": "#4db6ac"},
     {"audio":"B", "abcjs":"B2", "name": "SI", "octave": 5, "color": "#80cbc4"},
-    {"audio":"C", "abcjs":"c2", "name": "DO+", "octave": 5, "color": "#b2dfdb"}
+    {"audio":"C", "abcjs":"c2", "name": "DO ", "octave": 5, "color": "#b2dfdb"}
 ]
 
 

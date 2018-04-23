@@ -1,34 +1,54 @@
 <template>
 <div id="app">
-    <b-card bg-variant="light" header="DEVINEZ LA NOTE MYSTÈRE" class="text-center">
-       
-                <div class='wrapper'>
-                  <b-button v-if="partyStarted === false" class='game-score' lg @click="startParty">Nouvelle partie</b-button>
-                  <b-button v-else class='game-score' lg>
-                    Score : <span>{{score}}</span> - Erreurs : <span>{{errors}}</span>
-                    </b-button>
-                  <div class='guess'>
-                    <div id='notes-list'>
-                        <transition-group name="flip-notes">
-                            <template v-for="note in notes">
+    <b-card bg-variant="light" title="Devinez la note jouée par l'ordinateur" header="" class="text-center">
+
+        <!-- Endgame screen -->
+        <div v-if='displayEndGame' class="end-game">
+            <p>Fin de partie !</p>
+            <p>Votre score : {{score}}</p>
+            <b-button @click='replay'>Rejouer toutes les notes</b-button>
+            <b-button @click='resetGame'>OK</b-button>
+        </div>
+
+        <!-- Game screen -->
+        <div v-else class='wrapper'>
+            <b-button v-if="partyStarted === false" class='game-score' lg @click="startParty">NOUVELLE PARTIE</b-button>
+            <b-button v-else class='game-score' lg>
+                Score : <span>{{score}}</span> - Erreurs : <span>{{errors}}</span>
+            </b-button>
+
+            
+            <div class='guess'>
+                <!-- Notes to click -->
+                <div id='notes-list'>
+                    <transition-group name="flip-notes">
+                        <template v-for="note in notes">
                             <span class='note-name' :key='note.name' @click='guessNote(note)' :style='{backgroundColor : note.color}'>{{note.name}} </span>
                           </template>
-                        </transition-group>
-                    </div>
-                    <div v-if="displaySonar === true" class="btn-sonar"></div>
-                    <div v-else class="btn-static"><h4><b-badge v-if="message.text !==''" id='message' :style='{backgroundColor : message.color}'>{{message.text}}</b-badge></h4></div>
-                  </div>
-                  <div class='result'>
-                    <p>Meilleurs scores :</p>
-                    <ol id='scores-list'>
-                        <li v-for="score in bestScores" :key='score'> {{score}}</li>
-                    </ol>
-                  </div>
+                    </transition-group>
                 </div>
 
-                <div class='displaynotes' id="paper">
-                    <!-- Musical partition injected here -->
+                <!--  Animation and message -->
+                <div v-if="displaySonar === true" class="btn-sonar"></div>
+                <div v-else class="btn-static">
+                    <h4>
+                        <b-badge v-if="message.text !==''" id='message' :style='{backgroundColor : message.color}'>{{message.text}}</b-badge>
+                    </h4>
                 </div>
+            </div>
+
+            <!-- Best scores board -->
+            <div class='best-scores'>
+                <h5>Meilleurs scores :</h5>
+                <ol id='scores-list'>
+                    <li v-for="score in bestScores" :key='score'> {{score}}</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class='displaynotes' id="paper">
+            <!-- Musical partition injected here -->
+        </div>
     </b-card>
 </div>
 </template>
@@ -55,13 +75,16 @@ export default {
     data() {
         return {
             notes: notesList,
-            partyStarted : false,
+            partyStarted: false,
             playedNote: {},
+            playedNotes: [],
             timeStart: 0,
             errors: 0,
             score: 0,
             scoresList: [],
+            countReplay: 0,
             displaySonar: false,
+            displayEndGame: false,
             message: {
                 text: '',
                 color: ''
@@ -91,8 +114,8 @@ export default {
             this.notes = _.shuffle(this.notes)
         },
         startParty: function () {
-          this.partyStarted = true
-          this.playRandomNote()
+            this.partyStarted = true
+            this.playRandomNote()
         },
         playRandomNote: function () {
             this.timeStart = Date.now()
@@ -101,6 +124,7 @@ export default {
             let randomNum = Math.floor(Math.random() * 8)
             let note = this.notes[randomNum]
             this.playedNote = note
+            this.playedNotes.push(note);
             this.displaySonar = true
             let self = this
             setTimeout(() => {
@@ -152,12 +176,25 @@ export default {
             }
         },
         endGame: function () {
-            alert(`End game ! Your score : ${this.score}`)
+            this.displayEndGame = true
             this.scoresList.push(this.score)
-
-            // Reset all
+        },
+        replay: function () {
+            let self = this
+            if (this.countReplay < this.playedNotes.length - 1) {
+                setTimeout(() => {
+                    let note = this.playedNotes[this.countReplay]
+                    synth.playNote(synth.noteToMIDI(note.audio, note.octave), 2.0, 1.0, 0)
+                    self.countReplay++
+                        self.replay();
+                }, 500);
+            } else this.countReplay = 0
+        },
+        resetGame: function () {
+            this.displayEndGame = false
             abcjs.renderAbc("paper", "M:4/4\n||", {})
             this.partition.notes = ''
+            this.playedNotes = []
             this.partition.count = 0
             this.message.text = ''
             this.message.color = ''
@@ -181,22 +218,45 @@ export default {
 }
 
 .wrapper {
-  display: grid;
-  margin: auto;
-  grid-template-columns: 460px 100px ;
+    display: grid;
+    width: 550px;
+    height: 400px;
+    margin: auto;
+    border: 1px solid black;
+    grid-template-columns: 440px 110px;
+    grid-template-rows: 50px 350px;
 }
 
 .game-score {
-  grid-column: 1 / 3;
-  margin-bottom: 30px;
+    grid-column: 1 / 3;
+    grid-row: 1 / 2;
 }
 
+.best-scores {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    padding-top: 30px;
+    background-color: rgba(2, 65, 49, 0.87);
+    color: white;
+}
+
+.guess {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+}
+
+.end-game {
+    width: 550px;
+    height: 400px;
+    margin: auto;
+    border: 1px solid black;
+}
 
 #notes-list {
     margin: auto;
     display: flex;
     flex-wrap: wrap;
-    width: 210px;
+    width: 250px;
     margin-top: 50px;
     margin-bottom: 50px;
 }
@@ -205,9 +265,9 @@ export default {
     cursor: pointer;
     display: inline-block;
     margin: 1px;
-    width: 50px;
-    height: 50px;
-    line-height: 50px;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
     border-radius: 5px;
 }
 
@@ -220,8 +280,9 @@ export default {
 }
 
 /* SONAR EFFECT - adapted from https://codepen.io/tieppt/pen/vKJNaE : */
+
 .btn-static {
-   margin: 10px;
+    margin: 10px;
     border: 0;
     border-radius: 50%;
     width: 30px;
