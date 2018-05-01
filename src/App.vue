@@ -2,6 +2,7 @@
 <div id="app">
     <b-card bg-variant="light" title="Devinez la note jouée par l'ordinateur" header="" class="text-center">
 
+
         <!-- Endgame screen -->
         <div v-if='displayEndGame' class="end-game">
             <p>Fin de partie !</p>
@@ -11,44 +12,50 @@
         </div>
 
         <!-- Game screen -->
-        <div v-else class='wrapper'>
-            <b-button v-if="partyStarted === false" class='game-score' lg @click="startParty">NOUVELLE PARTIE</b-button>
+        <div v-else>
+            <b-button v-if="partyStarted === false" class='game-score' variant="primary" lg @click="startParty">NOUVELLE PARTIE</b-button>
             <b-button v-else class='game-score' lg>
                 Score : <span>{{score}}</span> - Erreurs : <span>{{errors}}</span>
             </b-button>
 
-            
-            <div class='guess'>
-                <!-- Notes to click -->
-                <div id='notes-list'>
-                    <transition-group name="flip-notes">
-                        <template v-for="note in notes">
+            <div v-if="partyStarted" class='wrapper'>
+                <div class='guess'>
+                    <!-- Notes to click -->
+                    <div id='notes-list'>
+                        <transition-group name="flip-notes">
+                            <template v-for="note in notes">
                             <span class='note-name' :key='note.name' @click='guessNote(note)' :style='{backgroundColor : note.color}'>{{note.name}} </span>
                           </template>
-                    </transition-group>
+                        </transition-group>
+                    </div>
+
+                    <!--  Animation and message -->
+                    <div v-if="displaySonar === true" class="btn-sonar"></div>
+                    <div v-else class="btn-static">
+                        <h4>
+                            <b-badge v-if="message.text !==''" id='message' :style='{backgroundColor : message.color}'>{{message.text}}</b-badge>
+                        </h4>
+                    </div>
                 </div>
 
-                <!--  Animation and message -->
-                <div v-if="displaySonar === true" class="btn-sonar"></div>
-                <div v-else class="btn-static">
-                    <h4>
-                        <b-badge v-if="message.text !==''" id='message' :style='{backgroundColor : message.color}'>{{message.text}}</b-badge>
-                    </h4>
+                <!-- Best scores board -->
+                <div class='best-scores'>
+                    <h5>Meilleurs scores :</h5>
+                    <ol id='scores-list'>
+                        <li v-for="score in bestScores" :key='score'> {{score}}</li>
+                    </ol>
+                </div>
+
+
+                <div class='displaynotes' id="paper">
+                    <!-- Musical partition injected here -->
                 </div>
             </div>
-
-            <!-- Best scores board -->
-            <div class='best-scores'>
-                <h5>Meilleurs scores :</h5>
-                <ol id='scores-list'>
-                    <li v-for="score in bestScores" :key='score'> {{score}}</li>
-                </ol>
+            <div v-else>
+                <img src="./assets/vintage-piano.jpg" alt="Vintage piano picture">
             </div>
         </div>
 
-        <div class='displaynotes' id="paper">
-            <!-- Musical partition injected here -->
-        </div>
     </b-card>
 </div>
 </template>
@@ -62,7 +69,7 @@ const AudioSynth = require('audiosynth')
 const AudioContext = window.AudioContext || window.webkitAudioContext
 const context = new AudioContext()
 const synth = new AudioSynth(context)
-synth.setOscWave(3)
+synth.setOscWave(0)
 
 
 export default {
@@ -172,7 +179,7 @@ export default {
                 let self = this
                 setTimeout(() => {
                     self.playRandomNote()
-                }, 2500)
+                }, 2200)
             }
         },
         endGame: function () {
@@ -214,42 +221,49 @@ export default {
     text-align: center;
     color: #2c3e50;
     max-width: 600px !important;
+    min-height: 750px;
     margin: auto;
+}
+
+img {
+    width: 550px;
+}
+.game-score {
+    width: 99%;
 }
 
 .wrapper {
     display: grid;
     width: 550px;
-    height: 400px;
+    height: 700px;
     margin: auto;
-    border: 1px solid black;
-    grid-template-columns: 440px 110px;
-    grid-template-rows: 50px 350px;
+    grid-template-columns: 350px 200px;
+    grid-template-rows: 300px 400px;
 }
 
-.game-score {
-    grid-column: 1 / 3;
+.guess {
+    grid-column: 1 / 2;
     grid-row: 1 / 2;
 }
 
 .best-scores {
     grid-column: 2 / 3;
-    grid-row: 2 / 3;
+    grid-row: 1 / 2;
     padding-top: 30px;
     background-color: rgba(2, 65, 49, 0.87);
     color: white;
 }
 
-.guess {
-    grid-column: 1 / 2;
+#paper {
+    grid-column: 1 / 3;
     grid-row: 2 / 3;
+    max-width: 500px;
 }
 
 .end-game {
     width: 550px;
     height: 400px;
     margin: auto;
-    border: 1px solid black;
 }
 
 #notes-list {
@@ -271,9 +285,7 @@ export default {
     border-radius: 5px;
 }
 
-#paper {
-    max-width: 500px;
-}
+
 
 .flip-notes-move {
     transition: transform 1s;
